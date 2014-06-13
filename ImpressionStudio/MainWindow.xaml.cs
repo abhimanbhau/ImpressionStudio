@@ -19,7 +19,7 @@ namespace ImpressionStudio
     public partial class MainWindow
     {
         private readonly RichTextBox _rtb;
-        private ObservableCollection<Slide> _slides = new ObservableCollection<Slide>();
+        private ObservableCollection<ImpressSlide> _slides = new ObservableCollection<ImpressSlide>();
 
         public MainWindow()
         {
@@ -151,7 +151,7 @@ namespace ImpressionStudio
             var title = new PresentationTitleWindow();
             title.ShowDialog();
             fileContents.Insert(2, title.PresentationTitle);
-            var gen = new MarkupGenerator(_slides);
+            var gen = new ImpressMarkupGenerator(_slides);
             List<string> markup = gen.GetMarkup();
             markup.Reverse();
             foreach (string str in markup)
@@ -191,7 +191,7 @@ namespace ImpressionStudio
             FillSlideData(_slides[lstSlides.SelectedIndex]);
         }
 
-        private void FillSlideData(Slide arg)
+        private void FillSlideData(ImpressSlide arg)
         {
             _rtb.Clear();
             txtID.Text = arg.Id;
@@ -235,7 +235,7 @@ namespace ImpressionStudio
                 && CheckNumeric(txtDataRotate.Text)
                 && CheckNumeric(txtDataScale.Text))
             {
-                Slide temp = _slides[lstSlides.SelectedIndex];
+                ImpressSlide temp = _slides[lstSlides.SelectedIndex];
                 UpdateSlide(ref temp);
                 _slides[lstSlides.SelectedIndex] = temp;
                 MessageBox.Show("Successfully modified step slide", "Success",
@@ -249,7 +249,7 @@ namespace ImpressionStudio
             }
         }
 
-        private void UpdateSlide(ref Slide arg)
+        private void UpdateSlide(ref ImpressSlide arg)
         {
             arg.DataRotate = Convert.ToInt32(txtDataRotate.Text);
             arg.DataRotateX = Convert.ToInt32(txtDataRotateX.Text);
@@ -332,10 +332,10 @@ namespace ImpressionStudio
                     return;
                 }
                 _slides = null;
-                _slides = new ObservableCollection<Slide>();
+                _slides = new ObservableCollection<ImpressSlide>();
                 var ser = new XmlSerializer(_slides.GetType());
                 FileStream fs = File.OpenRead(@"temp\tempSlides.ist");
-                _slides = (ObservableCollection<Slide>)ser.Deserialize(fs);
+                _slides = (ObservableCollection<ImpressSlide>)ser.Deserialize(fs);
                 lstSlides.ItemsSource = _slides;
                 lstSlides.DisplayMemberPath = "Header";
                 MessageBox.Show("Successfully loaded Project into workspace", "Success",

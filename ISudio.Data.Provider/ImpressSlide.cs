@@ -1,6 +1,6 @@
 ﻿namespace ISudio.Data.Provider
 {
-    public class Slide
+    public class ImpressSlide
     {
         public string Id { get; set; }
         public string Class { get; set; }

@@ -4,11 +4,11 @@ using System.Collections.ObjectModel;
 
 namespace ISudio.Data.Provider
 {
-    public class MarkupGenerator
+    public class ImpressMarkupGenerator
     {
-        private readonly ObservableCollection<Slide> _slides;
+        private readonly ObservableCollection<ImpressSlide> _slides;
 
-        public MarkupGenerator(ObservableCollection<Slide> aslides)
+        public ImpressMarkupGenerator(ObservableCollection<ImpressSlide> aslides)
         {
             _slides = aslides;
         }
@@ -17,7 +17,7 @@ namespace ISudio.Data.Provider
         {
             char dQuote = Convert.ToChar(34);
             var markup = new List<string>();
-            foreach (Slide slide in _slides)
+            foreach (ImpressSlide slide in _slides)
             {
                 string data;
                 data =

@@ -14,7 +14,7 @@ namespace ImpressionStudio
     {
         private readonly RichTextBox _rtb;
         private bool _isValidData;
-        private Slide _slide;
+        private ImpressSlide _slide;
 
         public NewSlide()
         {
@@ -104,7 +104,7 @@ namespace ImpressionStudio
                                String.Format(@"<ul>{0}<li>Item1</li>{0}<li>Item1</li>{0}</ul>", Environment.NewLine);
         }
 
-        public Slide GetSlide()
+        public ImpressSlide GetSlide()
         {
             if (_slide == null)
             {
@@ -141,7 +141,7 @@ namespace ImpressionStudio
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            _slide = new Slide
+            _slide = new ImpressSlide
             {
                 Id = txtID.Text.Trim(),
                 DataX = Convert.ToInt16(txtDataX.Text.Trim()),
