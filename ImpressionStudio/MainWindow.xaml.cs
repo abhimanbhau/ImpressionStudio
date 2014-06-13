@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Ionic.Zip;
+using ISudio.Data.Provider;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -7,14 +9,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using Ionic.Zip;
-using ISudio.Data.Provider;
 using WPF.ThemesEx;
 using Application = System.Windows.Application;
 using MessageBox = Xceed.Wpf.Toolkit.MessageBox;
 using RichTextBox = System.Windows.Forms.RichTextBox;
-using System.Windows.Shapes;
-using System.Windows.Media;
 
 namespace ImpressionStudio
 {
@@ -52,8 +50,8 @@ namespace ImpressionStudio
             lstSlides.ItemsSource = _slides;
             lstSlides.DisplayMemberPath = "Header";
 
-            cmbSlideType.Items.Add("step slide");
-            cmbSlideType.Items.Add("step");
+            cmbSlideType.Items.Add("Step Slide");
+            cmbSlideType.Items.Add("Step");
         }
 
         private void btnCreateNewSlide_Click(object sender, RoutedEventArgs e)
@@ -63,7 +61,13 @@ namespace ImpressionStudio
             if (newSlideForm.GetSlide() != null)
             {
                 _slides.Add(newSlideForm.GetSlide());
-                DrawOverviewCanvas();
+            }
+            else
+            {
+                MessageBox.Show("No slide is created",
+                    "Empty slide",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
             }
         }
 
@@ -107,8 +111,7 @@ namespace ImpressionStudio
                         }
                     }
                     catch
-                    {
-                    }
+                    { }
                 }
             }
         }
@@ -122,7 +125,7 @@ namespace ImpressionStudio
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            string destinationDirectory;
+            string destinationDirectory = string.Empty;
             using (var folder = new FolderBrowserDialog { Description = "Select output folder" })
             {
                 if (folder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -188,29 +191,6 @@ namespace ImpressionStudio
             FillSlideData(_slides[lstSlides.SelectedIndex]);
         }
 
-        private void DrawOverviewCanvas()
-        {
-            int i = 1;
-            overviewCanvas.Children.Clear();
-            foreach (var slide in _slides)
-            {
-                TextBlock text = new TextBlock();
-                text.Text = "Slide " + i;
-                text.Foreground = new SolidColorBrush(Colors.RosyBrown);
-                text.Margin = new Thickness(12 + (Math.Abs(slide.DataX) * 0.1), 20 + (Math.Abs(slide.DataY) * 0.1), 0, 0);
-                Rectangle rect = new Rectangle();
-                rect.Stroke = new SolidColorBrush(Colors.Black);
-                rect.Fill = new SolidColorBrush(Colors.Gray);
-                rect.Width = 90;
-                rect.Height = 70;
-                Canvas.SetLeft(rect, Math.Abs(slide.DataX) * 0.1);
-                Canvas.SetTop(rect, Math.Abs(slide.DataY) * 0.1);
-                overviewCanvas.Children.Add(rect);
-                overviewCanvas.Children.Add(text);
-                i++;
-            }
-        }
-
         private void FillSlideData(Slide arg)
         {
             _rtb.Clear();
@@ -246,7 +226,7 @@ namespace ImpressionStudio
         private void btnUpdateSlide_Click(object sender, RoutedEventArgs e)
         {
             if (
-                CheckNumeric(txtDataX.Text)
+                   CheckNumeric(txtDataX.Text)
                 && CheckNumeric(txtDataY.Text)
                 && CheckNumeric(txtDataZ.Text)
                 && CheckNumeric(txtDataRotateX.Text)
@@ -255,15 +235,11 @@ namespace ImpressionStudio
                 && CheckNumeric(txtDataRotate.Text)
                 && CheckNumeric(txtDataScale.Text))
             {
-                if (lstSlides.SelectedIndex < 0)
-                {
-                    return;
-                }
-                int index = lstSlides.SelectedIndex;
                 Slide temp = _slides[lstSlides.SelectedIndex];
                 UpdateSlide(ref temp);
                 _slides[lstSlides.SelectedIndex] = temp;
-                lstSlides.SelectedIndex = index;
+                MessageBox.Show("Successfully modified step slide", "Success",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
@@ -335,7 +311,7 @@ namespace ImpressionStudio
             zip.ExtractAll("temp/");
             string[] files = Directory.GetFiles(@"temp\");
             bool valid = false;
-            foreach (string file in files)
+            foreach (var file in files)
             {
                 if ((file == @"temp\tempSlides.ist"))
                 {
@@ -345,7 +321,7 @@ namespace ImpressionStudio
             if (!valid)
             {
                 MessageBox.Show("This is not a valid IStudio Project File",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                       "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
@@ -362,7 +338,8 @@ namespace ImpressionStudio
                 _slides = (ObservableCollection<Slide>)ser.Deserialize(fs);
                 lstSlides.ItemsSource = _slides;
                 lstSlides.DisplayMemberPath = "Header";
-                DrawOverviewCanvas();
+                MessageBox.Show("Successfully loaded Project into workspace", "Success",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -370,26 +347,11 @@ namespace ImpressionStudio
         {
             MessageBox.Show(
                 "Impression Studio Beta\n" +
-                "This is a free and open-source software\n" +
+                "This is a free and open-source software\n" + 
                 "This software uses Impress.js library\n" +
                 "Copyright (c)2014 Abhimanbhau Kolte",
                 "About Impression Studio",
-                MessageBoxButton.YesNo, MessageBoxImage.Information);
-        }
-
-        private void MenuHelp_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (
-                MessageBox.Show(
-                    "You need no prior experience of HTML\n" +
-                    "or very basic knowledge(if you want customize default look)" +
-                    "\n\nFor help on creating awesome presentation, follow link\n" +
-                    "Click Yes to visit documentation home",
-                    "Impression Studio Help",
-                    MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
-            {
-                Process.Start("http://website.com/docs");
-            }
+                MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
