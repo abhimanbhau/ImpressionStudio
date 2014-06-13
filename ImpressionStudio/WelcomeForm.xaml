@@ -1,0 +1,8 @@
+﻿<Window x:Class="ImpressionStudio.WelcomeForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Welcome To Impression Studio" Height="221.591" Width="400">
+    <Grid>
+
+    </Grid>
+</Window>

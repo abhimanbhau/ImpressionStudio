@@ -137,6 +137,9 @@
     <Compile Include="PresentationTitle.xaml.cs">
       <DependentUpon>PresentationTitle.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WelcomeForm.xaml.cs">
+      <DependentUpon>WelcomeForm.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -154,6 +157,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PresentationTitle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WelcomeForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
