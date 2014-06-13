@@ -1,6 +1,6 @@
 ﻿<Window x:Class="ImpressionStudio.PresentationTitleWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Height="74.662" Width="300"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Height="85.662" Width="300"
         Title="Enter Title For Presentation" WindowStartupLocation="CenterScreen">
     <Grid>
         <TextBox x:Name="txtTitle" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" />
