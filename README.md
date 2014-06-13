@@ -1,7 +1,7 @@
 ImpressionStudio
 ================
 
-Free Presentation Maker For Windows based on Impress.JS Library
+Free Presentation Maker For Windows based on Impress.JS Library and Reveal.JS library(WIP)
 
 This tool is written in C#/WPF/.NET 4.5
 Make sure you have .NET 4.5 instslled before installing this app.
